@@ -135,4 +135,7 @@ public/build/
 # Mac
 .DS_Store
 
+# VSCode
+.vscode/
+
 downloads/

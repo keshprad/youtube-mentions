@@ -1,13 +1,16 @@
 from typing import List
 import youtube_dl
-from card_generators import shazam
+from card_generators import shazam, bs4
+import json
 
 
-def get_yt_url(vid_id): return f"https://youtu.be/{vid_id}"
+def get_yt_url(
+    vid_id: str) -> str: return f"https://www.youtube.com/watch?v={vid_id}"
 
 
-async def generate(vid_id: str) -> List:
+async def generate(vid_id: str) -> List[dict]:
     """Calls all card_generators and returns list of cards (represented as dicts)"""
+    yt_url = get_yt_url(vid_id)
     cards = []
 
     # download audio and video
@@ -16,6 +19,10 @@ async def generate(vid_id: str) -> List:
 
     print("// [2] Detecting Music //")
     cards += await shazam.identify_song(f'downloads/a_{vid_id}.m4a')
+
+    print("// [3] Scraping for Games & Music //")
+    # cards += bs4.scrape(yt_url)
+    # scraped = bs4.scrape(yt_url)
 
     return cards
 
@@ -39,3 +46,6 @@ def dl_audio_video(vid_id: str):
     }
     with youtube_dl.YoutubeDL(ydl_audio_opts) as ydl:
         ydl.download([yt_url])
+
+    # Meta Info
+    meta = ydl.extract_info(yt_url, download=False)
