@@ -2,9 +2,8 @@ import spacy
 import en_core_web_sm
 from youtube_transcript_api import YouTubeTranscriptApi
 from typing import List
-from wiki_helper import get_wiki_image
+from wiki_helper import get_wiki_info
 import wikipedia
-
 
 URL = 'https://youtu.be/LIYiThAyY8s'
 
@@ -14,7 +13,7 @@ URL = 'https://youtu.be/LIYiThAyY8s'
 #     if 'youtu.be' in parsed.hostname: return parsed.path[1:]
 #     return None
 
-async def identify_entities(video_id : str) -> List:
+def identify_entities(video_id : str) -> List:
     transcript = YouTubeTranscriptApi.get_transcript(video_id)
 
     text = ' '.join([ line['text'].replace('-', ' ') for line in transcript ])
@@ -29,30 +28,24 @@ def create_entity_cards(text : str, start_times : List) -> List:
     categories = {"PERSON": "person", "LOC": "place", "GPE": "place"}
 
     ents = {}
-    for i in range(len(doc.ents)):
+    size = len(doc.ents)
+    for i in range(size):
         if doc.ents[i].label_ in categories.keys():
             name = doc.ents[i].text
             found = wikipedia.search(name, results=1)[0]
 
             if found not in ents.keys():
-                try:
-                    page = wikipedia.page(found, auto_suggest=False )
-                except wikipedia.DisambiguationError as e:
-                    found = e.options[0]
-                    page = wikipedia.page(found, auto_suggest=False )
-                    
+                info = get_wiki_info(found)
+
                 ents[found] = {
                     'name': found,
                     'card_type': categories[doc.ents[i].label_],
                     'time': {'start': start_times[i]},
-                    'image': get_wiki_image(found),
-                    'links': { 'wikipedia': page.url },
-                    'summary': wikipedia.summary(found, sentences=2, auto_suggest=False ),
+                    'image': info['image'],
+                    'links': { 'wikipedia': info['link'] },
+                    'summary': info['summary'],
                 }
 
     cards = list(ents.values())
 
     return cards
-
-# if __name__ == "__main__":
-#     print(identify_entities("LIYiThAyY8s"))
