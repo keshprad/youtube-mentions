@@ -10,7 +10,7 @@ def get_wiki_info(title : str) -> str:
 
     summary = list(json_data['query']['pages'].values())[0]['extract'].split('\n')[0]
 
-    print("wiki_helper.py: " + summary)
+    print("wiki_helper.py: " + str(summary))
 
     link = "https://en.wikipedia.org/wiki/" + title.replace(' ', '_')
 
@@ -20,6 +20,6 @@ def get_wiki_info(title : str) -> str:
     image = soup.find("meta",  property="og:image")
     image = image['content'] if image else None
 
-    print("wiki_helper.py: " + image)
+    print("wiki_helper.py: " + str(image))
 
     return { 'summary': summary + '..', 'image': image, 'link': link }
