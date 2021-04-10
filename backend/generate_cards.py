@@ -1,7 +1,6 @@
 from typing import List
 import youtube_dl
 from card_generators import shazam, entity, scrape
-import json
 
 
 def get_yt_url(
@@ -24,8 +23,7 @@ async def generate(vid_id: str) -> List[dict]:
     # cards += await entity.identify_entities(vid_id)
 
     print("// [4] Scraping for Games & Music //")
-    # cards += await scrape.scrape_game_music(yt_url)
-    await scrape.scrape_game_music(yt_url)
+    cards += await scrape.scrape_game_music(yt_url)
 
     return cards
 
