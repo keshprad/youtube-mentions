@@ -1,17 +1,23 @@
 from typing import List
 import youtube_dl
+from card_generators import shazam
 
 
 def get_yt_url(vid_id): return f"https://youtu.be/{vid_id}"
 
 
 async def generate(vid_id: str) -> List:
-    print("// [1] Downloading Audio & Video //")
+    """Calls all card_generators and returns list of cards (represented as dicts)"""
+    cards = []
 
     # download audio and video
+    print("// [1] Downloading Audio & Video //")
     dl_audio_video(vid_id)
 
-    return []
+    print("// [2] Detecting Music //")
+    cards += await shazam.identify_song(f'downloads/a_{vid_id}.m4a')
+
+    return cards
 
 
 def dl_audio_video(vid_id: str):

@@ -1,1 +1,4 @@
 fastapi==0.63.0
+shazamio==0.0.2
+wikipedia==1.4.0
+youtube_dl==2021.4.7
