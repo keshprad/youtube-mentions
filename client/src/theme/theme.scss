@@ -1,0 +1,19 @@
+html {
+  min-height: 100%;
+  min-width: 100%;
+  background-color: #000;
+  color: #fff;
+  @import '@material/theme/color-palette';
+
+  $mdc-theme-primary: #ff3e00;
+  $mdc-theme-accent: #676778;
+  $mdc-theme-secondary: #40b3ff;
+  $mdc-theme-background: #fff;
+  $mdc-theme-surface: #bebebe;
+  $mdc-theme-error: #ff0000;
+
+  @import '@material/theme/variables';
+  @each $style in map-keys($mdc-theme-property-values) {
+    --mdc-theme-#{$style}: #{map-get($mdc-theme-property-values, $style)};
+  }
+}
