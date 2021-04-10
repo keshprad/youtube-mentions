@@ -1,6 +1,6 @@
 from typing import List
 import youtube_dl
-from card_generators import shazam
+from card_generators import shazam, entity
 
 
 def get_yt_url(vid_id): return f"https://youtu.be/{vid_id}"
@@ -16,6 +16,9 @@ async def generate(vid_id: str) -> List:
 
     print("// [2] Detecting Music //")
     cards += await shazam.identify_song(f'downloads/a_{vid_id}.m4a')
+
+    print("// [3] Detecting Entities //")
+    cards += await people.identify_entities(vid_id)
 
     return cards
 
