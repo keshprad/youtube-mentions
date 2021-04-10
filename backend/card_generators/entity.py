@@ -2,8 +2,9 @@ import spacy
 import en_core_web_sm
 from youtube_transcript_api import YouTubeTranscriptApi
 from typing import List
+from helper import get_wiki_image
 import wikipedia
-import helper
+
 
 URL = 'https://youtu.be/LIYiThAyY8s'
 
@@ -18,10 +19,10 @@ async def identify_entities(video_id : str) -> List:
 
     text = ' '.join([ line['text'].replace('-', ' ') for line in transcript ])
 
-    cards = create_entity_cards(doc)
+    cards = create_entity_cards(text)
     return cards
 
-def create_entity_cards(text : str) -> List:
+def create_entity_cards(text : str, transcript : List) -> List:
     nlp = en_core_web_sm.load()
     doc = nlp(text)
 
