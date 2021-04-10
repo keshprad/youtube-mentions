@@ -2,7 +2,8 @@ import spacy
 import en_core_web_sm
 from youtube_transcript_api import YouTubeTranscriptApi
 from typing import List
-from helper import get_wiki_image
+from wiki_helper import get_wiki_image
+from pprint import pprint
 import wikipedia
 
 
@@ -26,28 +27,29 @@ def create_entity_cards(text : str, start_times : List) -> List:
     nlp = en_core_web_sm.load()
     doc = nlp(text)
 
+    categories = ("PERSON", "LOC", "GPE")
+
     ents = {}
     for i in range(len(doc.ents)):
-    categories = ("PERSON", "LOC", "GPE")
-    if doc.ents[i].label_ in categories:
-        name = doc.ents[i].text
-        found = wikipedia.search(name, results=1)[0]
+        if doc.ents[i].label_ in categories:
+            name = doc.ents[i].text
+            found = wikipedia.search(name, results=1)[0]
 
-        if found not in ents.keys():
-            try:
-                page = wikipedia.page(found, auto_suggest=False )
-            except wikipedia.DisambiguationError as e:
-                found = e.options[0]
-                page = wikipedia.page(found, auto_suggest=False )
-                
-            ents[found] = {
-                'name': found,
-                'card_type': doc.ents[i].label_,
-                'time': {'start': starts[i]},
-                'image': helper.get_wiki_image(found),
-                'links': { 'wikipedia': page.url },
-                'summary': wikipedia.summary(found, sentences=2, auto_suggest=False ),
-            }
+            if found not in ents.keys():
+                try:
+                    page = wikipedia.page(found, auto_suggest=False )
+                except wikipedia.DisambiguationError as e:
+                    found = e.options[0]
+                    page = wikipedia.page(found, auto_suggest=False )
+                    
+                ents[found] = {
+                    'name': found,
+                    'card_type': doc.ents[i].label_,
+                    'time': {'start': start_times[i]},
+                    'image': get_wiki_image(found),
+                    'links': { 'wikipedia': page.url },
+                    'summary': wikipedia.summary(found, sentences=2, auto_suggest=False ),
+                }
 
     cards = list(ents.values())
 
