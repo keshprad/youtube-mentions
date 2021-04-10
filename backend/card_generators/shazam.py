@@ -1,17 +1,14 @@
+from typing import List
 from shazamio import Shazam, FactoryArtist
 import wikipedia
 import json
 
 
-async def identify_song(audio_path):
+async def identify_song(audio_path: str) -> List[dict]:
     """Use Shazam API to find artist & song, then create cards for them."""
     shazam = Shazam()
 
     song = await shazam.recognize_song(audio_path)
-
-    # For Testing: Reads JSON from test.json
-    # with open(f'test_in.json', 'r') as json_file:
-    #     song = json.load(json_file)
 
     cards = []
     if len(song['matches']) > 0:
@@ -22,14 +19,10 @@ async def identify_song(audio_path):
         # Generate card for song:
         song_card = create_song_card(song=song)
         cards.append(song_card)
-
-        # For Testing: Writes a JSON to test.json
-        # with open(f'test_out.json', 'w') as json_file:
-        #     json.dump(cards, json_file, indent=4)
     return cards
 
 
-def create_song_card(song):
+def create_song_card(song: dict) -> List[dict]:
     song_card = {
         'card_type': 'song',
         'time': {'start': 0},
@@ -47,7 +40,7 @@ def create_song_card(song):
     return song_card
 
 
-async def create_artist_cards(artists):
+async def create_artist_cards(artists: List[dict]) -> List[dict]:
     shazam = Shazam()
     artist_cards = []
     for artist in artists:
