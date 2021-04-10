@@ -13,15 +13,16 @@ URL = 'https://youtu.be/LIYiThAyY8s'
 #     if 'youtu.be' in parsed.hostname: return parsed.path[1:]
 #     return None
 
-def identify_entities(video_id : str) -> List:
+async def identify_entities(video_id : str) -> List:
     transcript = YouTubeTranscriptApi.get_transcript(video_id)
 
-    text = ' '.join([ line['text'].replace('-', ' ') for line in transcript ])
+    text = ' '.join([line['text'].replace('-', ' ') for line in transcript])
 
-    cards = create_entity_cards(text, [ line['start'] for line in transcript ])
+    cards = create_entity_cards(text, [line['start'] for line in transcript])
     return cards
 
-def create_entity_cards(text : str, start_times : List) -> List:
+
+def create_entity_cards(text: str, start_times: List) -> List:
     nlp = en_core_web_sm.load()
     doc = nlp(text)
 
@@ -45,7 +46,6 @@ def create_entity_cards(text : str, start_times : List) -> List:
                     'links': { 'wikipedia': info['link'] },
                     'summary': info['summary'],
                 }
-
     cards = list(ents.values())
 
     return cards
