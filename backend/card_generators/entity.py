@@ -19,26 +19,32 @@ async def identify_entities(video_id : str) -> List:
 
     text = ' '.join([ line['text'].replace('-', ' ') for line in transcript ])
 
-    cards = create_entity_cards(text)
+    cards = create_entity_cards(text, [ line['start'] for line in transcript ])
     return cards
 
-def create_entity_cards(text : str, transcript : List) -> List:
+def create_entity_cards(text : str, start_times : List) -> List:
     nlp = en_core_web_sm.load()
     doc = nlp(text)
 
     ents = {}
-    for i in range(len(doc.ents) - 1, -1, -1):
-        categories = ("PERSON", "LOC", "GPE")
-        if doc.ents[i].label_ in categories and len(doc.ents[i].text.split()) > 1:
-            name = doc.ents[i].text
-            found = wikipedia.search(name, results=1)[0]
-            page = wikipedia.page(found, auto_suggest=False )
+    for i in range(len(doc.ents)):
+    categories = ("PERSON", "LOC", "GPE")
+    if doc.ents[i].label_ in categories:
+        name = doc.ents[i].text
+        found = wikipedia.search(name, results=1)[0]
 
-            ents[name] = {
-                'name': name,
+        if found not in ents.keys():
+            try:
+                page = wikipedia.page(found, auto_suggest=False )
+            except wikipedia.DisambiguationError as e:
+                found = e.options[0]
+                page = wikipedia.page(found, auto_suggest=False )
+                
+            ents[found] = {
+                'name': found,
                 'card_type': doc.ents[i].label_,
-                'time': {'start': transcript[i]['start']},
-                'image': get_wiki_image(found),
+                'time': {'start': starts[i]},
+                'image': helper.get_wiki_image(found),
                 'links': { 'wikipedia': page.url },
                 'summary': wikipedia.summary(found, sentences=2, auto_suggest=False ),
             }
