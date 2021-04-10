@@ -1,17 +1,8 @@
 import spacy
 import en_core_web_sm
-from urllib import parse
-from spacy import displacy
-from collections import Counter
 from youtube_transcript_api import YouTubeTranscriptApi
 from typing import List
-
 import wikipedia
-import requests
-import json
-import pprint
-from pathlib import Path
-
 import helper
 
 URL = 'https://youtu.be/LIYiThAyY8s'
