@@ -3,7 +3,6 @@ import en_core_web_sm
 from youtube_transcript_api import YouTubeTranscriptApi
 from typing import List
 from wiki_helper import get_wiki_image
-from pprint import pprint
 import wikipedia
 
 
@@ -27,11 +26,11 @@ def create_entity_cards(text : str, start_times : List) -> List:
     nlp = en_core_web_sm.load()
     doc = nlp(text)
 
-    categories = ("PERSON", "LOC", "GPE")
+    categories = {"PERSON": "person", "LOC": "place", "GPE": "place"}
 
     ents = {}
     for i in range(len(doc.ents)):
-        if doc.ents[i].label_ in categories:
+        if doc.ents[i].label_ in categories.keys():
             name = doc.ents[i].text
             found = wikipedia.search(name, results=1)[0]
 
@@ -44,7 +43,7 @@ def create_entity_cards(text : str, start_times : List) -> List:
                     
                 ents[found] = {
                     'name': found,
-                    'card_type': doc.ents[i].label_,
+                    'card_type': categories[doc.ents[i].label_],
                     'time': {'start': start_times[i]},
                     'image': get_wiki_image(found),
                     'links': { 'wikipedia': page.url },
@@ -54,3 +53,6 @@ def create_entity_cards(text : str, start_times : List) -> List:
     cards = list(ents.values())
 
     return cards
+
+# if __name__ == "__main__":
+#     print(identify_entities("LIYiThAyY8s"))
