@@ -4,13 +4,9 @@
 
 `pip install -r requirements`
 
----
-
 ## Development
 
 `pip install -r dev-requirements.txt`
-
----
 
 ## Starting FastAPI server
 
