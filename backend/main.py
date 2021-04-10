@@ -31,7 +31,7 @@ async def get_cards(vid_id: str):
     #         "genre": "Pop",
     #         "links": {
     #             "shazam": "https://www.shazam.com/artist/4300/rick-astley",
-    #             "wikipedia": "https://en.wikipedia.org/wiki/Rick_Astley"
+    #             "wikipedia": "https://en.wikipedia.org/wiki/Rick_Astley",
     #         },
     #         "summary": "Richard Paul Astley (born 6 February 1966) is a British singer, songwriter and radio personality. He rose to fame through his association with the production trio Stock Aitken Waterman; his 1987 recording of their song \"Never Gonna Give You Up\" was a number 1 hit single in 25 countries, winning the 1988 Brit Award for Best British Single."
     #     },
@@ -60,7 +60,6 @@ async def get_cards(vid_id: str):
     #         "links": {
     #             "shazam": "https://www.shazam.com/track/357027/never-gonna-give-you-up",
     #             "apple": "https://music.apple.com/gb/album/never-gonna-give-you-up/1558533900?i=1558534271&mttnagencyid=769459046716559743&mttnsiteid=125115&mttn3pid=a_custom_779816081798873874&mttnsub1=Shazam_ios&mttnsub2=5348615A-616D-3235-3830-44754D6D5973&itscg=30201&app=music&itsct=Shazam_ios",
-    #             "spotify": "spotify:track:4uLU6hMCjMI75M1A2tKUQC"
     #         }
     #     },
     # ]

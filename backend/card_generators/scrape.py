@@ -7,7 +7,7 @@ from shazamio import Shazam
 from card_generators.shazam import create_artist_cards
 
 
-async def scrape_game_music(yt_url: str) -> List[dict]:
+async def scrape_game_music(yt_url: str, scrape_game: bool = True, scrape_songs: bool = True) -> List[dict]:
     browser = await launch()
     page = await browser.newPage()
     await page.goto(yt_url, {
@@ -17,21 +17,23 @@ async def scrape_game_music(yt_url: str) -> List[dict]:
     if showmore is not None:
         await showmore.click()
 
-    # Query for categories (used for finding game name)
-    cat_elems = await page.querySelectorAll('a#endpoint-link div#title')
-    game = await find_game(cat_elems, page)
-    # Query for music name and artist
-    music_elems = await page.querySelectorAll('div#collapsible > .style-scope > *')
-    songs = await find_songs(music_elems, page)
+    # Query for element with categories (used for finding game name)
+    if scrape_game:
+        cat_elems = await page.querySelectorAll('a#endpoint-link div#title')
+        game = await find_game(cat_elems, page)
+    # Scrape for element with song name and artist
+    if scrape_songs:
+        song_elems = await page.querySelectorAll('div#collapsible > .style-scope > *')
+        songs = await find_songs(song_elems, page)
 
     # Close browser
     await browser.close()
 
     cards = []
-    if game is not None:
+    if scrape_game and game is not None:
         game_card = create_game_card(game)
         cards.append(game_card)
-    if len(songs) > 0:
+    if scrape_songs and len(songs) > 0:
         for song in songs:
             song_info = await shazam_search(song)
             if song_info is not None:

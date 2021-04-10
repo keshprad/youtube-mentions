@@ -23,24 +23,34 @@
   </Content>
   <Actions>
     <ActionIcons>
-      <Button
-        style="margin: 0;"
-        href={song["links"]["shazam"]}
-        target="_blank"
-        color="primary"
-      >
-        <Label>Shazam</Label>
-      </Button>
-      <IconButton href={song["links"]["apple"]} target="_blank" color="primary">
-        <i class="fas fa-music" />
-      </IconButton>
-      <IconButton
-        href={song["links"]["spotify"]}
-        target="_blank"
-        color="primary"
-      >
-        <i class="fab fa-spotify" />
-      </IconButton>
+      {#if song["links"].hasOwnProperty("shazam")}
+        <Button
+          style="margin: 0;"
+          href={song["links"]["shazam"]}
+          target="_blank"
+          color="primary"
+        >
+          <Label>Shazam</Label>
+        </Button>
+      {/if}
+      {#if song["links"].hasOwnProperty("apple")}
+        <IconButton
+          href={song["links"]["apple"]}
+          target="_blank"
+          color="primary"
+        >
+          <i class="fas fa-music" />
+        </IconButton>
+      {/if}
+      {#if song["links"].hasOwnProperty("spotify")}
+        <IconButton
+          href={song["links"]["spotify"]}
+          target="_blank"
+          color="primary"
+        >
+          <i class="fab fa-spotify" />
+        </IconButton>
+      {/if}
     </ActionIcons>
   </Actions>
 </Card>

@@ -3,6 +3,7 @@
   import axios from "axios";
   import Button, { Label } from "@smui/button";
   import Icon from "@smui/textfield/icon/index";
+  import LinearProgress from "@smui/linear-progress";
   import Textfield from "@smui/textfield";
 
   // My Imports
@@ -21,10 +22,8 @@
   };
 
   let cardsPromise = () => {
-    return axios
-    .get(`${domain}/cards/${vidId}`)
-    .then((res) => res.data);
-  }
+    return axios.get(`${domain}/cards/${vidId}`).then((res) => res.data);
+  };
   let loading = false;
 </script>
 
@@ -82,6 +81,9 @@
       <div class="left-div">
         <h2 class="title">YouTube Interact</h2>
         <p>Loading YouTube id: {vidId}</p>
+        <div class="progress-bar">
+          <LinearProgress indeterminate />
+        </div>
       </div>
     {:then cards}
       <div class="left-div">
@@ -126,6 +128,9 @@
   }
   .title {
     color: var(--mdc-theme-primary);
+  }
+  div.progress-bar {
+    width: 50%;
   }
   span.url-input {
     margin: 20px 0;
