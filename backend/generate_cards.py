@@ -14,17 +14,20 @@ async def generate(vid_id: str) -> List[dict]:
 
     # download audio and video
     print("// [1] Downloading Audio & Video //")
-    # dl_audio_video(vid_id)
+    dl_audio_video(vid_id)
 
     print("// [2] Detecting Music //")
-    # cards += await shazam.identify_song(f'downloads/a_{vid_id}.m4a')
+    shazam_cards = await shazam.identify_song(f'downloads/a_{vid_id}.m4a')
+    scrape_songs = len(shazam_cards) == 0
+    cards += shazam_cards
 
     print("// [3] Detecting Entities //")
-    # cards += await entity.identify_entities(vid_id)
+    # ent_cards = await entity.identify_entities(vid_id)
+    # cards += ent_cards
 
     print("// [4] Scraping for Games & Music //")
-    cards += await scrape.scrape_game_music(yt_url)
-
+    scraped_cards = await scrape.scrape_game_music(yt_url, scrape_songs=scrape_songs)
+    cards += scraped_cards
     return cards
 
 

@@ -4,7 +4,7 @@
   import YoutubePlayer from "youtube-player";
 
   // My Imports
-  import '../theme/colors.js';
+  import "../theme/colors.js";
 
   // Props
   export let videoId, updateTime;
@@ -42,7 +42,7 @@
 
   function play(videoId) {
     if (player && videoId) {
-      player.cueVideoById({ videoId: videoId});
+      player.cueVideoById({ videoId: videoId });
     }
   }
 </script>

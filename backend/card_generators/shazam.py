@@ -34,6 +34,8 @@ def create_song_card(song: dict) -> List[dict]:
             'apple': song['track']['myshazam']['apple']['actions'][0]['uri'],
         },
     }
+    if 'apple' in song['track']['myshazam']:
+        song_card['links']['apple'] = song['track']['myshazam']['apple']['actions'][0]['uri']
     for provider in song['track']['hub']['providers']:
         if provider['type'] == 'SPOTIFY':
             song_card['links']['spotify'] = provider['actions'][0]['uri']

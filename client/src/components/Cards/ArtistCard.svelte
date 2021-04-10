@@ -28,21 +28,25 @@
   </Content>
   <Actions>
     <ActionIcons>
-      <Button
-        style="margin: 0;"
-        href={artist["links"]["shazam"]}
-        target="_blank"
-        color="primary"
-      >
-        <Label>Shazam</Label>
-      </Button>
-      <IconButton
-        href={artist["links"]["wikipedia"]}
-        target="_blank"
-        color="primary"
-      >
-        <i class="fab fa-wikipedia-w" />
-      </IconButton>
+      {#if artist["links"].hasOwnProperty("shazam")}
+        <Button
+          style="margin: 0;"
+          href={artist["links"]["shazam"]}
+          target="_blank"
+          color="primary"
+        >
+          <Label>Shazam</Label>
+        </Button>
+      {/if}
+      {#if artist["links"].hasOwnProperty("wikipedia")}
+        <IconButton
+          href={artist["links"]["wikipedia"]}
+          target="_blank"
+          color="primary"
+        >
+          <i class="fab fa-wikipedia-w" />
+        </IconButton>
+      {/if}
     </ActionIcons>
   </Actions>
 </Card>
