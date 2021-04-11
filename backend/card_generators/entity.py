@@ -13,7 +13,11 @@ import wikipedia
 
 
 async def identify_entities(video_id: str) -> List:
-    transcript = YouTubeTranscriptApi.get_transcript(video_id)
+    try:    
+        transcript = YouTubeTranscriptApi.get_transcript(video_id)
+    except Exception as e:
+        print(e)
+        return []
 
     lines = []
 
