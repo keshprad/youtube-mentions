@@ -6,29 +6,29 @@
   import IconButton from "@smui/icon-button";
 
   // Props
-  export let person;
+  export let place;
 </script>
 
 <Card style="width: 100%;">
   <Content style="padding-bottom: 0;">
     <div class="content-container">
       <div class="left-container">
-        {#if person["image"]}
-           <img src={person["image"]} alt={person['name']} />
+        {#if place["image"]}
+           <img src={place["image"]} alt={place['name']} />
         {/if}
-        <p><strong>timestamp:</strong> {(person['time']['start']/60).toFixed(0)}:{(person['time']['start']%60).toFixed(0).padStart(2, '0')}</p>
+        <p><strong>timestamp:</strong> {(place['time']['start']/60).toFixed(0)}:{(place['time']['start']%60).toFixed(0).padStart(2, '0')}</p>
       </div>
       <div class="text-container">
-        <p class="name">{person["name"]}</p>
-        <p class="summary">{person["summary"]}</p>
+        <p class="name">{place["name"]}</p>
+        <p class="summary">{place["summary"]}</p>
       </div>
     </div>
   </Content>
   <Actions>
     <ActionIcons>
-      {#if person["links"].hasOwnProperty("wikipedia")}
+      {#if place["links"].hasOwnProperty("wikipedia")}
         <IconButton
-          href={person["links"]["wikipedia"]}
+          href={place["links"]["wikipedia"]}
           target="_blank"
           color="primary"
         >
