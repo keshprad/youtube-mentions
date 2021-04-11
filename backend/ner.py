@@ -17,22 +17,26 @@ URL = 'https://youtu.be/LIYiThAyY8s'
 def identify_entities(video_id: str) -> List:
     transcript = YouTubeTranscriptApi.get_transcript(video_id)
 
-    lines = [line['text'].replace('-', ' ') for line in transcript]
+    lines = []
 
-    cards = create_entity_cards(lines, [line['start'] for line in transcript])
+    for each in transcript:
+        line = { 'start': each['start'], 'text': each['text'].replace('-', ' ') }
+        lines.append(line)
+
+    cards = create_entity_cards(lines)
     return cards
 
 
-def create_entity_cards(lines: List, start_times: List) -> List:
+def create_entity_cards(lines: List) -> List:
     nlp = en_core_web_sm.load()
 
     categories = {"PERSON": "person", "LOC": "place", "GPE": "place"}
 
     ents = {}
-    size = len(start_times)
+    size = len(lines)
 
     for i in range(size):
-        doc = nlp(lines[i])
+        doc = nlp(lines[i]['text'])
 
         for ent in doc.ents:
             if ent.label_ in categories.keys():
@@ -45,7 +49,7 @@ def create_entity_cards(lines: List, start_times: List) -> List:
                     ents[found] = {
                         'name': found,
                         'card_type': categories[ent.label_],
-                        'time': {'start': start_times[i]},
+                        'time': {'start': lines[i]['start']},
                         'image': info['image'],
                         'links': {'wikipedia': info['link']},
                         'summary': info['summary'],
@@ -55,4 +59,4 @@ def create_entity_cards(lines: List, start_times: List) -> List:
     return cards
 
 if __name__ == "__main__":
-   print(identify_entities('9PpZLgZUMOA'))
+   print(identify_entities('LIYiThAyY8s'))
