@@ -2,10 +2,10 @@ import spacy
 import en_core_web_sm
 from youtube_transcript_api import YouTubeTranscriptApi
 from typing import List
+from card_generators.wiki_helper import get_wiki_info
 import wikipedia
-import helper
 
-id = 'LIYiThAyY8s'
+URL = 'https://youtu.be/LIYiThAyY8s'
 
 # def get_id(url):
 #     parsed = parse.urlparse(url)
@@ -13,39 +13,46 @@ id = 'LIYiThAyY8s'
 #     if 'youtu.be' in parsed.hostname: return parsed.path[1:]
 #     return None
 
-transcript = YouTubeTranscriptApi.get_transcript(id)
 
-nlp = en_core_web_sm.load()
+def identify_entities(video_id: str) -> List:
+    transcript = YouTubeTranscriptApi.get_transcript(video_id)
 
-text = ' '.join([ line['text'].replace('-', ' ') for line in transcript ])
+    lines = [line['text'].replace('-', ' ') for line in transcript]
 
-starts = [ line['start'] for line in transcript ]
-
-doc = nlp(text)
-
-ents = {}
-for i in range(len(doc.ents)):
-    categories = ("PERSON", "LOC", "GPE")
-    if doc.ents[i].label_ in categories:
-        name = doc.ents[i].text
-        found = wikipedia.search(name, results=1)[0]
-
-        if found not in ents.keys():
-            try:
-                page = wikipedia.page(found, auto_suggest=False )
-            except wikipedia.DisambiguationError as e:
-                found = e.options[0]
-                page = wikipedia.page(found, auto_suggest=False )
-                
-            ents[found] = {
-                'name': found,
-                'card_type': doc.ents[i].label_,
-                'time': {'start': starts[i]},
-                'image': helper.get_wiki_image(found),
-                'links': { 'wikipedia': page.url },
-                'summary': wikipedia.summary(found, sentences=2, auto_suggest=False ),
-            }
-            print(ents[found])
+    cards = create_entity_cards(lines, [line['start'] for line in transcript])
+    return cards
 
 
-print(list(ents.values()))
+def create_entity_cards(lines: List, start_times: List) -> List:
+    nlp = en_core_web_sm.load()
+
+    categories = {"PERSON": "person", "LOC": "place", "GPE": "place"}
+
+    ents = {}
+    size = len(start_times)
+
+    for i in range(size):
+        doc = nlp(lines[i])
+
+        for ent in doc.ents:
+            if ent.label_ in categories.keys():
+                name = ent.text
+                found = wikipedia.search(name, results=1)[0]
+
+                if found not in ents.keys():
+                    info = get_wiki_info(found)
+
+                    ents[found] = {
+                        'name': found,
+                        'card_type': categories[ent.label_],
+                        'time': {'start': start_times[i]},
+                        'image': info['image'],
+                        'links': {'wikipedia': info['link']},
+                        'summary': info['summary'],
+                    }
+    cards = list(ents.values())
+
+    return cards
+
+if __name__ == "__main__":
+   print(identify_entities('9PpZLgZUMOA'))
