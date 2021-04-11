@@ -1,14 +1,25 @@
 from typing import List
 from shazamio import Shazam, FactoryArtist
+from pydub import AudioSegment
 import wikipedia
-import json
+from card_generators.wiki_helper import get_wiki_info
+from tempfile import NamedTemporaryFile
 
 
 async def identify_song(audio_path: str) -> List[dict]:
     """Use Shazam API to find artist & song, then create cards for them."""
     shazam = Shazam()
 
-    song = await shazam.recognize_song(audio_path)
+    audio = AudioSegment.from_file(audio_path)
+    clip_length = 30
+    if audio.duration_seconds > clip_length:
+        clip = audio[:clip_length*1000]
+        clip_file = NamedTemporaryFile(mode='w')
+        clip.export(clip_file.name, format="mp3")
+        song = await shazam.recognize_song(clip_file.name)
+        clip_file.close()
+    else:
+        song = await shazam.recognize_song(audio_path)
 
     cards = []
     if len(song['matches']) > 0:
@@ -51,8 +62,8 @@ async def create_artist_cards(artists: List[dict]) -> List[dict]:
         serialized = FactoryArtist(data=about_artist).serializer()
 
         # Find Artist's wiki page and get info
-        artist_wiki = wikipedia.page(serialized.name)
-        wiki_summary = wikipedia.summary(serialized.name, sentences=2)
+        wiki_title = wikipedia.search(serialized.name, results=1)[0]
+        artist_wiki = get_wiki_info(wiki_title)
 
         artist_card = {
             'card_type': 'artist',
@@ -62,9 +73,9 @@ async def create_artist_cards(artists: List[dict]) -> List[dict]:
             'genre': serialized.genres_primary,
             'links': {
                 'shazam': f"https://www.shazam.com/artist/{artist['id']}/{serialized.alias}",
-                'wikipedia': artist_wiki.url,
+                'wikipedia': artist_wiki['link'],
             },
-            'summary': wiki_summary,
+            'summary': artist_wiki['summary'],
         }
         artist_cards.append(artist_card)
     return artist_cards

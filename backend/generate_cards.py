@@ -28,6 +28,7 @@ async def generate(vid_id: str) -> List[dict]:
     print("// [4] Scraping for Games & Music //")
     scraped_cards = await scrape.scrape_game_music(yt_url, scrape_songs=scrape_songs)
     cards += scraped_cards
+
     return cards
 
 

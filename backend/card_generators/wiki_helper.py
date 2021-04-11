@@ -2,24 +2,20 @@ import requests
 import json
 from bs4 import BeautifulSoup
 
-WIKI_REQUEST = 'https://en.wikipedia.org/w/api.php?action=query&prop=extracts&explaintext=&format=json&redirects=&exsentences=2&titles='
 
-def get_wiki_info(title : str) -> str:
-    response  = requests.get(WIKI_REQUEST + title)
+def get_wiki_info(title: str, sentences: int = 2) -> str:
+    WIKI_REQUEST = f'https://en.wikipedia.org/w/api.php?action=query&prop=extracts&explaintext=&format=json&redirects=&exsentences={sentences}&titles={title}'
+    response = requests.get(WIKI_REQUEST)
     json_data = json.loads(response.text)
 
-    summary = list(json_data['query']['pages'].values())[0]['extract'].split('\n')[0]
-
-    print("wiki_helper.py: " + str(summary))
-
+    summary = list(json_data['query']['pages'].values())[
+        0]['extract'].split('\n')[0]
     link = "https://en.wikipedia.org/wiki/" + title.replace(' ', '_')
 
     response = requests.get(link)
-    soup = BeautifulSoup(response.text)
-    
+    soup = BeautifulSoup(response.text, features='html.parser')
+
     image = soup.find("meta",  property="og:image")
     image = image['content'] if image else None
 
-    print("wiki_helper.py: " + str(image))
-
-    return { 'summary': summary + '..', 'image': image, 'link': link }
+    return {'summary': summary + '..', 'image': image, 'link': link}

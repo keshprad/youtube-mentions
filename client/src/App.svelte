@@ -79,7 +79,7 @@
   {:else}
     {#await cardsPromise()}
       <div class="left-div">
-        <h2 class="title">YouTube Interact</h2>
+        <h2 class="title">YouTube Mentions</h2>
         <p>Loading YouTube id: {vidId}</p>
         <div class="progress-bar">
           <LinearProgress indeterminate />
@@ -87,7 +87,7 @@
       </div>
     {:then cards}
       <div class="left-div">
-        <h2 class="title">YouTube Interact</h2>
+        <h2 class="title">YouTube Mentions</h2>
         <p>Watching {vidId}</p>
         <Youtube videoId={vidId} {updateTime} />
       </div>

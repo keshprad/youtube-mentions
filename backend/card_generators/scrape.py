@@ -2,7 +2,7 @@ from card_generators.shazam import create_song_card
 from typing import List
 from pyppeteer import launch
 import wikipedia
-from card_generators.wiki_helper import get_wiki_image
+from card_generators.wiki_helper import get_wiki_info
 from shazamio import Shazam
 from card_generators.shazam import create_artist_cards
 
@@ -55,19 +55,18 @@ async def find_game(cat_elems: List, page) -> str:
 
 def create_game_card(game: str) -> dict:
     # Find Game's wiki page and get info
-    title = wikipedia.search(game, results=1)[0]
-    wiki_page = wikipedia.page(title, auto_suggest=False)
-    wiki_summary = wikipedia.summary(title, sentences=2, auto_suggest=False)
+    wiki_title = wikipedia.search(game, results=1)[0]
+    game_wiki = get_wiki_info(wiki_title)
 
     game_card = {
         'card_type': 'game',
         'time': {'start': 0},
         'title': game,
-        'image': get_wiki_image(wiki_page.url),
+        'image': game_wiki["image"],
         'links': {
-            'wikipedia': wiki_page.url,
+            'wikipedia': game_wiki['link'],
         },
-        'summary': wiki_summary,
+        'summary': game_wiki['summary'],
     }
     return game_card
 
