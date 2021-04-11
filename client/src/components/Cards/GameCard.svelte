@@ -14,9 +14,14 @@
     <div class="content-container">
       <div class="left-container">
         {#if game["image"]}
-           <img src={game["image"]} alt={game['name']} />
+          <img src={game["image"]} alt={game["name"]} />
         {/if}
-        <p><strong>timestamp:</strong> {Math.floor(game['time']['start']/60)}:{(game['time']['start']%60).toFixed(0).padStart(2, '0')}</p>
+        <p>
+          <strong>timestamp:</strong>
+          {Math.floor(game["time"]["start"] / 60)}:{(game["time"]["start"] % 60)
+            .toFixed(0)
+            .padStart(2, "0")}
+        </p>
       </div>
       <div class="text-container">
         <p class="name">{game["name"]}</p>

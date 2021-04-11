@@ -14,9 +14,16 @@
     <div class="content-container">
       <div class="left-container">
         {#if person["image"]}
-           <img src={person["image"]} alt={person['name']} />
+          <img src={person["image"]} alt={person["name"]} />
         {/if}
-        <p><strong>timestamp:</strong> {Math.floor(person['time']['start']/60)}:{(person['time']['start']%60).toFixed(0).padStart(2, '0')}</p>
+        <p>
+          <strong>timestamp:</strong>
+          {Math.floor(person["time"]["start"] / 60)}:{(
+            person["time"]["start"] % 60
+          )
+            .toFixed(0)
+            .padStart(2, "0")}
+        </p>
       </div>
       <div class="text-container">
         <p class="name">{person["name"]}</p>

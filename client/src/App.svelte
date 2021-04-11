@@ -14,7 +14,7 @@
   // Props
   export let domain;
 
-  let vidURL = "https://youtu.be/dQw4w9WgXcQ";
+  let vidURL = "";
   $: vidId = vidURL.split(/[/=]+/).pop();
   let currTime = 0;
   const updateTime = (time) => {
