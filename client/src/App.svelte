@@ -54,7 +54,7 @@
   {#if !loading}
     <div class="left-div">
       <h1 class="welcome">
-        Welcome to <span class="title">Youtube Interact</span>.
+        Welcome to <span class="title">YouTube Mentions</span>.
       </h1>
       <Label>Enter a YouTube URL</Label>
       <span class="url-input">
