@@ -16,7 +16,7 @@
         {#if place["image"]}
            <img src={place["image"]} alt={place['name']} />
         {/if}
-        <p><strong>timestamp:</strong> {(place['time']['start']/60).toFixed(0)}:{(place['time']['start']%60).toFixed(0).padStart(2, '0')}</p>
+        <p><strong>timestamp:</strong> {Math.floor(place['time']['start']/60)}:{(place['time']['start']%60).toFixed(0).padStart(2, '0')}</p>
       </div>
       <div class="text-container">
         <p class="name">{place["name"]}</p>

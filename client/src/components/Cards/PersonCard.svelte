@@ -16,7 +16,7 @@
         {#if person["image"]}
            <img src={person["image"]} alt={person['name']} />
         {/if}
-        <p><strong>timestamp:</strong> {(person['time']['start']/60).toFixed(0)}:{(person['time']['start']%60).toFixed(0).padStart(2, '0')}</p>
+        <p><strong>timestamp:</strong> {Math.floor(person['time']['start']/60)}:{(person['time']['start']%60).toFixed(0).padStart(2, '0')}</p>
       </div>
       <div class="text-container">
         <p class="name">{person["name"]}</p>

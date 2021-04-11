@@ -16,7 +16,7 @@
         {#if song["image"]}
            <img src={song["image"]} alt={song['title']} />
         {/if}
-        <p><strong>timestamp:</strong> {(song['time']['start']/60).toFixed(0)}:{(song['time']['start']%60).toFixed(0).padStart(2, '0')}</p>
+        <p><strong>timestamp:</strong> {Math.floor(song['time']['start']/60)}:{(song['time']['start']%60).toFixed(0).padStart(2, '0')}</p>
       </div>
       <div class="text-container">
         <p class="title">{song["title"]}</p>

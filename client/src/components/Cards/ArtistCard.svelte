@@ -16,7 +16,7 @@
         {#if artist["image"]}
            <img src={artist["image"]} alt={artist['name']} />
         {/if}
-        <p><strong>timestamp:</strong> {(artist['time']['start']/60).toFixed(0)}:{(artist['time']['start']%60).toFixed(0).padStart(2, '0')}</p>
+        <p><strong>timestamp:</strong> {Math.floor(artist['time']['start']/60)}:{(artist['time']['start']%60).toFixed(0).padStart(2, '0')}</p>
       </div>
       <div class="text-container">
         <p>
