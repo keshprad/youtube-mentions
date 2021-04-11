@@ -12,8 +12,11 @@
 <Card style="width: 100%;">
   <Content style="padding-bottom: 0;">
     <div class="content-container">
-      <div class="img-container">
-        <img src={song["image"]} alt="song" />
+      <div class="left-container">
+        {#if song["image"]}
+           <img src={song["image"]} alt={song['title']} />
+        {/if}
+        <p><strong>timestamp:</strong> {(song['time']['start']/60).toFixed(0)}:{(song['time']['start']%60).toFixed(0).padStart(2, '0')}</p>
       </div>
       <div class="text-container">
         <p class="title">{song["title"]}</p>
@@ -60,15 +63,16 @@
     width: 100%;
     display: flex;
   }
-  .img-container {
+  .left-container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     margin-right: 10px;
     width: 40%;
     min-width: 100px;
   }
-  .img-container img {
+  .left-container img {
     width: 100%;
     height: auto;
   }

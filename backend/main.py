@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import generate_cards
+import json
 
 
 app = FastAPI()
@@ -63,6 +64,9 @@ async def get_cards(vid_id: str):
     #         }
     #     },
     # ]
+
+    with open('test_out.json', 'w') as file:
+        json.dump(cards, file, indent=2)
 
     # Return cards in reverse order
     return sorted(cards, key=lambda card: card['time']['start'], reverse=True)

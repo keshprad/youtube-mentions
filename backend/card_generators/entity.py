@@ -11,6 +11,7 @@ import wikipedia
 #     if 'youtu.be' in parsed.hostname: return parsed.path[1:]
 #     return None
 
+
 async def identify_entities(video_id: str) -> List:
     try:    
         transcript = YouTubeTranscriptApi.get_transcript(video_id)
@@ -21,11 +22,12 @@ async def identify_entities(video_id: str) -> List:
     lines = []
 
     for each in transcript:
-        line = { 'start': each['start'], 'text': each['text'].replace('-', ' ') }
+        line = {'start': each['start'], 'text': each['text'].replace('-', ' ')}
         lines.append(line)
 
     cards = create_entity_cards(lines)
     return cards
+
 
 def create_entity_cards(lines: List) -> List:
     nlp = en_core_web_sm.load()
@@ -57,5 +59,4 @@ def create_entity_cards(lines: List) -> List:
                         }
                         
     cards = list(ents.values())
-
     return cards

@@ -3,28 +3,35 @@
   import { slide } from "svelte/transition";
 
   // My Imports
-  import PersonCard from "./Cards/PersonCard.svelte";
-  import SongCard from "./Cards/SongCard.svelte";
   import ArtistCard from "./Cards/ArtistCard.svelte";
+  import PersonCard from "./Cards/PersonCard.svelte";
+  import PlaceCard from "./Cards/PlaceCard.svelte";
+  import SongCard from "./Cards/SongCard.svelte";
 
   // Props
   export let currTime, cards;
 
+  console.log(cards)
   $: currentCards = cards.filter((card) => currTime >= card["time"]["start"]);
 </script>
 
 <div class="cards-container">
   {#each currentCards as card}
     <div class="card">
-      {#if card["card_type"] === "person"}
-        <PersonCard {card} />
+      {#if card["card_type"] === "artist"}
+        <ArtistCard artist={card} />
+      {:else if card["card_type"] === "person"}
+        <PersonCard person={card} />
+      {:else if card["card_type"] === "place"}
+        <PlaceCard place={card} />
       {:else if card["card_type"] === "song"}
         <SongCard song={card} />
-      {:else if card["card_type"] === "artist"}
-        <ArtistCard artist={card} />
       {/if}
     </div>
   {/each}
+  {#if currentCards.length === 0}
+    <h3>Info will show up here as the video progresses.</h3>
+  {/if}
 </div>
 
 <style>
