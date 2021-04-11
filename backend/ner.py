@@ -49,15 +49,17 @@ def create_entity_cards(lines: List) -> List:
 
                 if found not in ents.keys():
                     info = get_wiki_info(found)
+                    
+                    if 'may refer to' not in info['summary']:
+                        ents[found] = {
+                            'name': found,
+                            'card_type': categories[ent.label_],
+                            'time': {'start': lines[i]['start']},
+                            'image': info['image'],
+                            'links': {'wikipedia': info['link']},
+                            'summary': info['summary'],
+                        }
 
-                    ents[found] = {
-                        'name': found,
-                        'card_type': categories[ent.label_],
-                        'time': {'start': lines[i]['start']},
-                        'image': info['image'],
-                        'links': {'wikipedia': info['link']},
-                        'summary': info['summary'],
-                    }
     cards = list(ents.values())
 
     return cards

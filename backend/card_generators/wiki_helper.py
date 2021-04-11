@@ -9,7 +9,7 @@ def get_wiki_info(title: str, sentences: int = 2) -> str:
     json_data = json.loads(response.text)
 
     summary = list(json_data['query']['pages'].values())[
-        0]['extract'].split('\n')[0]
+        0]['extract']
     link = "https://en.wikipedia.org/wiki/" + title.replace(' ', '_')
 
     response = requests.get(link)
