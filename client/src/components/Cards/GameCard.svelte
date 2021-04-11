@@ -6,29 +6,29 @@
   import IconButton from "@smui/icon-button";
 
   // Props
-  export let place;
+  export let game;
 </script>
 
 <Card style="width: 100%;">
   <Content style="padding-bottom: 0;">
     <div class="content-container">
       <div class="left-container">
-        {#if place["image"]}
-           <img src={place["image"]} alt={place['name']} />
+        {#if game["image"]}
+           <img src={game["image"]} alt={game['name']} />
         {/if}
-        <p><strong>timestamp:</strong> {(place['time']['start']/60).toFixed(0)}:{(place['time']['start']%60).toFixed(0).padStart(2, '0')}</p>
+        <p><strong>timestamp:</strong> {(game['time']['start']/60).toFixed(0)}:{(game['time']['start']%60).toFixed(0).padStart(2, '0')}</p>
       </div>
       <div class="text-container">
-        <p class="name">{place["name"]}</p>
-        <p class="summary">{place["summary"]}</p>
+        <p class="name">{game["name"]}</p>
+        <p class="summary">{game["summary"]}</p>
       </div>
     </div>
   </Content>
   <Actions>
     <ActionIcons>
-      {#if place["links"].hasOwnProperty("wikipedia")}
+      {#if game["links"].hasOwnProperty("wikipedia")}
         <IconButton
-          href={place["links"]["wikipedia"]}
+          href={game["links"]["wikipedia"]}
           target="_blank"
           color="primary"
         >

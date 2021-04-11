@@ -13,7 +13,7 @@ import wikipedia
 
 
 async def identify_entities(video_id: str) -> List:
-    try:    
+    try:
         transcript = YouTubeTranscriptApi.get_transcript(video_id)
     except Exception as e:
         print(e)
@@ -43,11 +43,14 @@ def create_entity_cards(lines: List) -> List:
         for ent in doc.ents:
             if ent.label_ in categories.keys():
                 name = ent.text
-                found = wikipedia.search(name, results=1)[0]
+                found = wikipedia.search(name, results=1)
+                if len(found) == 0:
+                    continue
+                found = found[0]
 
                 if found not in ents.keys():
                     info = get_wiki_info(found)
-                    
+
                     if 'may refer to' not in info['summary']:
                         ents[found] = {
                             'name': found,
@@ -57,6 +60,6 @@ def create_entity_cards(lines: List) -> List:
                             'links': {'wikipedia': info['link']},
                             'summary': info['summary'],
                         }
-                        
+
     cards = list(ents.values())
     return cards

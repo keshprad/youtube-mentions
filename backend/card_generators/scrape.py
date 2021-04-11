@@ -14,8 +14,10 @@ async def scrape_game_music(yt_url: str, scrape_game: bool = True, scrape_songs:
         'waitUntil': 'networkidle0'
     })
     showmore = await page.querySelector('paper-button#more')
-    if showmore is not None:
+    try:
         await showmore.click()
+    except:
+        pass
 
     # Query for element with categories (used for finding game name)
     if scrape_game:
@@ -61,7 +63,7 @@ def create_game_card(game: str) -> dict:
     game_card = {
         'card_type': 'game',
         'time': {'start': 0},
-        'title': game,
+        'name': game,
         'image': game_wiki["image"],
         'links': {
             'wikipedia': game_wiki['link'],

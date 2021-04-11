@@ -24,7 +24,7 @@ def identify_entities(video_id: str) -> List:
     lines = []
 
     for each in transcript:
-        line = { 'start': each['start'], 'text': each['text'].replace('-', ' ') }
+        line = {'start': each['start'], 'text': each['text'].replace('-', ' ')}
         lines.append(line)
 
     cards = create_entity_cards(lines)
@@ -45,11 +45,14 @@ def create_entity_cards(lines: List) -> List:
         for ent in doc.ents:
             if ent.label_ in categories.keys():
                 name = ent.text
-                found = wikipedia.search(name, results=1)[0]
+                found = wikipedia.search(name, results=1)
+                if len(found) == 0:
+                    continue
+                found = found[0]
 
                 if found not in ents.keys():
                     info = get_wiki_info(found)
-                    
+
                     if 'may refer to' not in info['summary']:
                         ents[found] = {
                             'name': found,
@@ -64,5 +67,6 @@ def create_entity_cards(lines: List) -> List:
 
     return cards
 
+
 if __name__ == "__main__":
-   print(identify_entities('LIYiThAyY8s'))
+    print(identify_entities('LIYiThAyY8s'))

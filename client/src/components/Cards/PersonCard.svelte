@@ -73,10 +73,6 @@
     font-size: 1rem;
     text-align: start;
   }
-  .genre {
-    font-style: italic;
-    font-size: 1rem;
-  }
   i {
     color: var(--mdc-theme-primary);
   }

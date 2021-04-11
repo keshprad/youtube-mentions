@@ -62,7 +62,10 @@ async def create_artist_cards(artists: List[dict]) -> List[dict]:
         serialized = FactoryArtist(data=about_artist).serializer()
 
         # Find Artist's wiki page and get info
-        wiki_title = wikipedia.search(serialized.name, results=1)[0]
+        wiki_title = wikipedia.search(serialized.name, results=1)
+        if len(wiki_title) == 0:
+            continue
+        wiki_title = wiki_title[0]
         artist_wiki = get_wiki_info(wiki_title)
 
         artist_card = {
